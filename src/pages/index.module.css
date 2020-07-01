@@ -6,8 +6,23 @@
   font-size: 40px;
 }
 
+.container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .linkContainer {
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex: 1;
+}
+
+.link {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
 }

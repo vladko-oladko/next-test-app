@@ -20,7 +20,6 @@ export async function getStaticPaths() {
 }
 
 export default function Home({ user }) {
-  console.log(user)
   return (
     <>
       <div>User Details</div>
