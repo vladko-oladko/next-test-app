@@ -1,30 +1,20 @@
-import Head from 'next/head'
-import fetcher from '../../services/fetcher'
+import { useRouter } from 'next/router'
+import { useUser } from '../../hooks/fetchHooks/user'
 
-export async function getStaticProps({ params }) {
-  console.log(params.id)
-  const user = await fetcher(`/users/${params.id}`)
-  return {
-    props: {
-      user
-    },
+export default function Home() {
+  const router = useRouter()
+  const { id } = router.query
+  const { user, isLoading } = useUser(id)
+
+  if (isLoading) {
+    return <div>loading</div>
   }
-}
 
-export async function getStaticPaths() {
-  const users = await fetcher('/users?page=1')
-  return {
-    paths: users.map(user => ({ params: { id: user.id } })),
-    fallback: false
-  };
-}
-
-export default function Home({ user }) {
   return (
     <>
       <div>User Details</div>
-      <div>{user.first_name}</div>
-      <div>{user.email}</div>
+      <div>{user?.name}</div>
+      <div>{user?.email}</div>
     </>
   )
 }

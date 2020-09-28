@@ -1,10 +1,11 @@
 import Head from 'next/head'
 import Link from 'next/link'
-import fetcher from '../services/fetcher'
+import PropTypes from 'prop-types'
+import { getUsers } from '../services/mockData'
 import styles from './index.module.css'
 
-export async function getStaticProps() {
-  const users = await fetcher('/users?page=1')
+export async function getServerSideProps() {
+  const users = getUsers();
   return {
     props: {
       users
@@ -12,8 +13,7 @@ export async function getStaticProps() {
   }
 }
 
-export default function Home({ users }) {
-  console.log(users)
+const Home = ({ users }) => {
   return (
     <div className="container">
       <Head>
@@ -24,26 +24,14 @@ export default function Home({ users }) {
         <div className={styles.title}>Index page (users) (static)</div>
         <div className={styles.container}>
           <div className={styles.linkContainer}>
-            <div>Links to static rendered users</div>
+            <div>Some users</div>
             {users.map(user => (
               <Link 
                 key={user.id} 
                 href='/user/[id]' 
                 as={`/user/${user.id}`}
               >
-                <a className={styles.link}>{user.email}</a>
-              </Link>            
-            ))}
-          </div>
-          <div className={styles.linkContainer}>
-            <div>Links to server rendered posts</div>
-            {users.map(user => (
-              <Link 
-                key={user.id} 
-                href='/posts/[id]' 
-                as={`/posts/${user.id}`}
-              >
-                <a className={styles.link}>{user.email}</a>
+                <a className={styles.link}>{user.name}</a>
               </Link>            
             ))}
           </div>
@@ -53,3 +41,15 @@ export default function Home({ users }) {
     </div>
   )
 }
+
+Home.propTypes = {
+  users: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.number,
+      name: PropTypes.string,
+    })
+  )
+};
+
+
+export default Home;
